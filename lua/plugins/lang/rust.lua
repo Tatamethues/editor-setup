@@ -9,6 +9,23 @@ return {
     end,
   },
   {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      {
+        "Saecki/crates.nvim",
+        event = { "BufRead Cargo.toml" },
+        config = true,
+      },
+    },
+    ---@param opts cmp.ConfigSchema
+    opts = function(_, opts)
+      local cmp = require("cmp")
+      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
+        { name = "crates" },
+      }))
+    end,
+  },
+  {
     "williamboman/mason.nvim",
     opts = function(_, opts)
       if type(opts.ensure_installed) == "table" then
@@ -18,6 +35,10 @@ return {
   },
   {
     "simrat39/rust-tools.nvim",
+    dependances = { "neovim/nvim-lspconfig" },
     ft = { "rust" },
+    config = function(_, opts)
+      require("rust-tools").setup()
+    end,
   },
 }
